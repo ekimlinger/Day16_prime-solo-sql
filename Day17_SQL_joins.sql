@@ -9,7 +9,7 @@ SELECT * FROM orders
 	ON orders.id = line_items.order_id;
 
 -- 3. Which warehouses have cheetos?
-SELECT warehouse FROM warehouse
+SELECT warehouse AS warehouses_with_cheetos FROM warehouse
 	JOIN warehouse_product 
 	ON warehouse.id = warehouse_product.warehouse_id
 	JOIN products
@@ -17,7 +17,7 @@ SELECT warehouse FROM warehouse
 	WHERE products.description = 'cheetos';
 
 -- 4. Which warehouses have diet pepsi?
-SELECT warehouse FROM warehouse
+SELECT warehouse AS warehouses_with_diet_pepsi FROM warehouse
 	JOIN warehouse_product
 	ON warehouse.id = warehouse_product.warehouse_id
 	JOIN products
@@ -27,11 +27,12 @@ SELECT warehouse FROM warehouse
 -- 5. Get the number of orders for each customer. NOTE: It is OK if those without orders are --not included in results.
 
 --still need to count ammount of orders.
-SELECT customers.first_name, customers.last_name, orders.total FROM orders
+SELECT customers.first_name, customers.last_name, COUNT(orders.id) AS order_total FROM orders
 	JOIN addresses
 	ON orders.address_id = addresses.id
 	JOIN customers
-	ON customers.id = addresses.customer_id;
+	ON customers.id = addresses.customer_id
+	GROUP BY customers.first_name, customers.last_name;
 
 -- 6. How many customers do we have?
 SELECT COUNT(*) FROM customers;
@@ -45,4 +46,5 @@ SELECT SUM(warehouse_product.on_hand) FROM warehouse_product
 	JOIN products
 	ON products.id = warehouse_product.product_id
 	WHERE products.description = 'diet pepsi';
+
 
